@@ -15,6 +15,13 @@ def ball_move(obj, s_with, s_height, pl, opp):
         speed_x *= -1
 
 
+def player_move(pl, s, s_height):
+    pl.y += s
+    if pl.top <= 0:
+        pl.top = 0
+    elif pl.bottom >= s_height:
+        pl.bottom = s_height
+
 W = 1280
 H = 720
 FPS = 60
@@ -59,5 +66,15 @@ while True:  # цикл игры
     pg.draw.ellipse(screen, BLUE, ball)
 
     pg.display.update()
+
+    keys = pg.key.get_pressed()
+    if keys[pg.K_UP]:
+        p_speed = -speed
+    elif keys[pg.K_DOWN]:
+        p_speed = speed
+    else:
+        p_speed = 0
+
     ball_move(ball, W, H, player, opponent)
+    player_move(player, p_speed, H)
 
