@@ -28,21 +28,35 @@ def restart(obj, s_width, s_height, s):
         score_time = None  # выключаем триггер
 
 
-def ball_move(obj, s_with, s_height, pl, opp):
+def ball_move(obj, s_with, s_height, pl, opp, sc_s, pon_s):
     global speed_x, speed_y, p_score, o_score, score_time  # объявляю переменные speed_x и speed_y из глобального пространства имен ГЛОБАЛЬНЫМИ для функции в тч
     obj.x += speed_x
     obj.y += speed_y
 
     if obj.top <= 0 or obj.bottom >= s_height:
         speed_y *= -1
+        pg.mixer.Sound.play(pon_s)
     elif obj.left <= 0:
+        pg.mixer.Sound.play(sc_s)
         score_time = pg.time.get_ticks()  # фиксация "времени", когда был забит гол
         p_score += 1
     elif obj.right >= s_with:
+        pg.mixer.Sound.play(sc_s)
         score_time = pg.time.get_ticks()  # фиксация "времени", когда был забит гол
         o_score += 1
-    elif obj.colliderect(pl) or obj.colliderect(opp):
-        speed_x *= -1
+
+    if obj.colliderect(pl):
+        pg.mixer.Sound.play(pon_s)
+        if abs(obj.right - pl.left) < 10:
+            speed_x *= -1
+        elif abs(obj.bottom - pl.top) < 10 or abs(obj.top - pl.bottom) < 10:
+            speed_x *= -1
+    elif obj.colliderect(opp):
+        pg.mixer.Sound.play(pon_s)
+        if abs(obj.left - opp.right) < 10:
+            speed_x *= -1
+        elif abs(obj.bottom - opp.top) < 10 or abs(obj.top - opp.bottom) < 10:
+            speed_x *= -1
 
 
 def player_move(pl, s, s_height):
@@ -93,6 +107,13 @@ speed_x = speed * choice([-1, 1])
 speed_y = speed * choice([-1, 1])
 score_time = True
 
+# sounds
+pg.mixer.init()  # инициализация работы со звуками
+pong_sound = pg.mixer.Sound('assets/pong.wav')
+score_sound = pg.mixer.Sound('assets/fail.wav')
+pong_sound.set_volume(0.2)
+score_sound.set_volume(0.2)
+
 p_score, o_score = 0, 0
 pg.font.init()
 score_font = pg.font.SysFont('comicsans', 64)
@@ -132,7 +153,7 @@ while True:  # цикл игры
     else:
         p_speed = 0
 
-    ball_move(ball, W, H, player, opponent)
+    ball_move(ball, W, H, player, opponent, score_sound, pong_sound)
     player_move(player, p_speed, H)
     opponent_motion(opponent, ball, o_speed, H)
 
