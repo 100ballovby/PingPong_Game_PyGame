@@ -89,15 +89,6 @@ GREEN = (138, 191, 126)
 WHITE = (255, 255, 255)
 BLUE = (109, 124, 191)
 
-# playable objects
-player = pg.Rect(0, 0, 15, 150)
-opponent = pg.Rect(0, 0, 15, 150)
-ball = pg.Rect(0, 0, 30, 30)
-
-player.center = (W - 15, H // 2)
-opponent.center = (15, H // 2)
-ball.center = (W // 2, H // 2)
-
 # game config
 speed = 7
 p_speed = 0
@@ -122,6 +113,24 @@ pg.init()  # инициализируем pygame
 screen = pg.display.set_mode((W, H))  # создаем экран игры разрешением 1280х720px
 pg.display.set_caption('Ping Pong | PyGame')
 
+
+# playable objects
+player_img = pg.image.load('assets/paddle2.png').convert_alpha()
+opponent_img = pg.image.load('assets/paddle1.png').convert_alpha()
+ball_img = pg.image.load('assets/ball.png').convert_alpha()
+
+player_img = pg.transform.scale(player_img, (33, 175))
+opponent_img = pg.transform.scale(opponent_img, (33, 175))
+ball_img = pg.transform.scale(ball_img, (40, 40))
+
+player = player_img.get_rect()
+opponent = opponent_img.get_rect()
+ball = ball_img.get_rect()
+
+player.center = (W - 15, H // 2)
+opponent.center = (15, H // 2)
+ball.center = (W // 2, H // 2)
+
 while True:  # цикл игры
     clock.tick(FPS)
     for event in pg.event.get():  # обработчик событий pygame
@@ -130,10 +139,11 @@ while True:  # цикл игры
             sys.exit()
 
     screen.fill(GREEN)
-    pg.draw.rect(screen, BLUE, player)
-    pg.draw.rect(screen, BLUE, opponent)
     pg.draw.aaline(screen, WHITE, [W // 2, 0], [W // 2, H])
-    pg.draw.ellipse(screen, BLUE, ball)
+
+    screen.blit(player_img, player)
+    screen.blit(opponent_img, opponent)
+    screen.blit(ball_img, ball)
 
     p_score_text = score_font.render(str(p_score), True, BLUE)
     o_score_text = score_font.render(str(o_score), True, BLUE)
