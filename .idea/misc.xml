@@ -3,8 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.12 (PingPong_Game_PyGame)" />
   </component>
-  <component name="GithubDefaultAccount">
-    <option name="defaultAccountId" value="b5669053-eb7a-480e-a45b-17030262fc37" />
-  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (PingPong_Game_PyGame)" project-jdk-type="Python SDK" />
 </project>

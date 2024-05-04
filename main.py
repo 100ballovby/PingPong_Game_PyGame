@@ -22,6 +22,19 @@ def player_move(pl, s, s_height):
     elif pl.bottom >= s_height:
         pl.bottom = s_height
 
+
+def opponent_motion(op, ball_obj, s, s_height):
+    if op.top < ball_obj.y:
+        op.y += s
+    elif op.bottom > ball_obj.y:
+        op.y -= s
+
+    if op.top <= 0:
+        op.top = 0
+    elif op.bottom >= s_height:
+        op.bottom = s_height
+
+
 W = 1280
 H = 720
 FPS = 60
@@ -44,7 +57,7 @@ ball.center = (W // 2, H // 2)
 # game config
 speed = 7
 p_speed = 0
-o_speed = 0
+o_speed = speed * 0.7
 ball_moving = False
 speed_x = speed_y = speed
 
@@ -77,4 +90,5 @@ while True:  # цикл игры
 
     ball_move(ball, W, H, player, opponent)
     player_move(player, p_speed, H)
+    opponent_motion(opponent, ball, o_speed, H)
 
